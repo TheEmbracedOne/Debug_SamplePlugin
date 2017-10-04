@@ -1,1 +1,0 @@
-C:\Users\Vulpi\Desktop\SamplePlugin-master\SamplePlugin-master\Source\bin\Windows\AnyCPU\Release\SamplePlugin.xml

@@ -39,14 +39,14 @@ namespace DebugMod
                         }
                     }
                     listReady = true;
-                    ModHooks.ModLog("[Debug Mod] [SAVEGAME MANAGER] Sucessfully updated list of files!");
+                    Modding.ModHooks.ModLog("[Debug Mod] [SAVEGAME MANAGER] Sucessfully updated list of files!");
                     return;
                 }
                 listReady = false;
-                ModHooks.ModLog("[Debug Mod] [SAVEGAME MANAGER] Directory 'practice' is empty or does not contain any .dat files!");
+                Modding.ModHooks.ModLog("[Debug Mod] [SAVEGAME MANAGER] Directory 'practice' is empty or does not contain any .dat files!");
             }
             listReady = false;
-            ModHooks.ModLog("[Debug Mod] [SAVEGAME MANAGER] Directory 'practice' does not exist!");
+            Modding.ModHooks.ModLog("[Debug Mod] [SAVEGAME MANAGER] Directory 'practice' does not exist!");
         }
 
         public static void CopyPracticeFile()
@@ -59,23 +59,23 @@ namespace DebugMod
                 try
                 {
                     File.Replace(sourceFileName, text, text2);
-                    ModHooks.ModLog("[DEBUG MOD] [SAVEGAME MANAGER] Replaced requested files and made backup");
+                    Modding.ModHooks.ModLog("[DEBUG MOD] [SAVEGAME MANAGER] Replaced requested files and made backup");
                     return;
                 }
                 catch (Exception arg)
                 {
-                    ModHooks.ModLog("[DEBUG MOD] [SAVEGAME MANAGER] Unable to replace pre-existing discarded save file: " + arg);
+                    Modding.ModHooks.ModLog("[DEBUG MOD] [SAVEGAME MANAGER] Unable to replace pre-existing discarded save file: " + arg);
                     return;
                 }
             }
             try
             {
                 File.Copy(sourceFileName, text, true);
-                ModHooks.ModLog("[DEBUG MOD] [SAVEGAME MANAGER] Copied the practice file");
+                Modding.ModHooks.ModLog("[DEBUG MOD] [SAVEGAME MANAGER] Copied the practice file");
             }
             catch (Exception arg2)
             {
-                ModHooks.ModLog("[DEBUG MOD] [SAVEGAME MANAGER] Unable to replace pre-existing discarded save file: " + arg2);
+                Modding.ModHooks.ModLog("[DEBUG MOD] [SAVEGAME MANAGER] Unable to replace pre-existing discarded save file: " + arg2);
             }
         }
 
@@ -95,14 +95,14 @@ namespace DebugMod
                     GUI.EndScrollView();
                     if (GUI.Button(new Rect(0f, 330f, 148f, 30f), "COPY"))
                     {
-                        ModHooks.ModLog("[DEBUG MOD] [SAVEGAME MANAGER] Selected file in list: " + fileList[selGridInt]);
-                        ModHooks.ModLog("[DEBUG MOD] [SAVEGAME MANAGER] File to copy: " + copyList[selGridInt]);
+                        Modding.ModHooks.ModLog("[DEBUG MOD] [SAVEGAME MANAGER] Selected file in list: " + fileList[selGridInt]);
+                        Modding.ModHooks.ModLog("[DEBUG MOD] [SAVEGAME MANAGER] File to copy: " + copyList[selGridInt]);
                         CopyPracticeFile();
                         UIManager.instance.UIGoToProfileMenu();
                     }
                     if (GUI.Button(new Rect(151f, 330f, 148f, 30f), "REFRESH"))
                     {
-                        ModHooks.ModLog("[DEBUG MOD] [SAVEGAME MANAGER] Refresh requested");
+                        Modding.ModHooks.ModLog("[DEBUG MOD] [SAVEGAME MANAGER] Refresh requested");
                         listReady = false;
                         GetPracticeSaves();
                         return;

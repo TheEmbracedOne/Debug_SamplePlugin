@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-//using Modding;
+using Modding;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 namespace DebugMod
 {
-    public class DebugMod : MonoBehaviour
+    public class DebugMod : Mod
     {
         private static GameManager _gm;
         private static InputHandler _ih;
@@ -23,31 +23,26 @@ namespace DebugMod
         private static float unloadTime;
         private static bool loadingChar;
 
-        public void Awake()
+        public static bool infiniteHP;
+        public static bool infiniteSoul;
+        public static bool playerInvincible;
+
+        public override void Initialize()
         {
             ModHooks.ModLog("Initializing debug mod");
             UnityEngine.SceneManagement.SceneManager.activeSceneChanged += LevelActivated;
-            UnityEngine.SceneManagement.SceneManager.sceneUnloaded += test;
             UnityEngine.GameObject UIObj = new UnityEngine.GameObject();
             UIObj.AddComponent<GUIController>();
             UnityEngine.GameObject.DontDestroyOnLoad(UIObj);
 
-            //ModHooks.Instance.SavegameLoadHook += LoadCharacter;
-            //ModHooks.Instance.NewGameHook += NewCharacter;
-            //ModHooks.Instance.BeforeSceneLoadHook += OnLevelUnload;
-            //ModHooks.Instance.SetPlayerBoolHook += GUIController.instance.PlayerSetBool;
+            ModHooks.Instance.SavegameLoadHook += LoadCharacter;
+            ModHooks.Instance.NewGameHook += NewCharacter;
+            ModHooks.Instance.BeforeSceneLoadHook += OnLevelUnload;
 
             BossHandler.PopulateBossLists();
             GUIController.instance.BuildMenus();
-        }
 
-        public void test(Scene sceneFrom)
-        {
-            Console.Reset();
-            EnemyController.Reset();
-            DreamGate.Reset();
-
-            loadingChar = false;
+            Console.AddLine("New session started " + DateTime.Now.ToString());
         }
 
         public void NewCharacter()
@@ -58,7 +53,7 @@ namespace DebugMod
         public void LoadCharacter(int saveId)
         {
             Console.Reset();
-            EnemyController.Reset();
+            EnemiesPanel.Reset();
             DreamGate.Reset();
 
             loadingChar = true;
@@ -78,7 +73,6 @@ namespace DebugMod
                 Console.AddLine("New savegame loaded. Profile playtime " + text + " Completion: " + PlayerData.instance.completionPercentage + " Save slot: " + profileID + " Game Version: " + PlayerData.instance.version + " Last Written: " + lastWriteTime);
 
                 GUIController.instance.SetMenusActive(true);
-                GUIController.instance.CharacterLoaded();
 
                 loadingChar = false;
             }

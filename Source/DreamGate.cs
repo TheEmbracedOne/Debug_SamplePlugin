@@ -38,7 +38,7 @@ namespace DebugMod
                     }
                     catch (Exception arg)
                     {
-                        ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] Unable to delete existing dreamgate.dat " + arg);
+                        Modding.ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] Unable to delete existing dreamgate.dat " + arg);
                         Console.AddLine("[DebugMod::DGata] Unable to delete existing dreamgate.dat " + arg);
                         return;
                     }
@@ -85,7 +85,7 @@ namespace DebugMod
                 if (array == null || array.Length == 0)
                 {
                     Console.AddLine("Unable to read content of dreamgate.dat properly, file is empty?");
-                    ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] Unable to read content of dreamgate.dat properly, file is empty?");
+                    Modding.ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] Unable to read content of dreamgate.dat properly, file is empty?");
                     dataBusy = false;
                     return;
                 }
@@ -116,14 +116,14 @@ namespace DebugMod
                                 }
                                 catch (FormatException)
                                 {
-                                    ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] FormatException - incorrect float format");
+                                    Modding.ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] FormatException - incorrect float format");
                                     Console.AddLine("DGdata::FormatException - incorrect float format");
                                     dataBusy = false;
                                     return;
                                 }
                                 catch (OverflowException)
                                 {
-                                    ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] OverflowException - incorrect float format");
+                                    Modding.ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] OverflowException - incorrect float format");
                                     Console.AddLine("DGdata::OverflowException - incorrect float format");
                                     dataBusy = false;
                                     return;
@@ -144,14 +144,14 @@ namespace DebugMod
                 if (DGData.Count > 0)
                 {
                     Console.AddLine("Filled DGdata: " + DGData.Count);
-                    ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] Filled DGdata: " + DGData.Count);
+                    Modding.ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] Filled DGdata: " + DGData.Count);
                     return;
                 }
             }
             else
             {
                 Console.AddLine("File dreamgate.dat not found!");
-                ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] File dreamgate.dat not found!");
+                Modding.ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] File dreamgate.dat not found!");
             }
         }
 

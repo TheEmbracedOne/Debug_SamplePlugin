@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace DebugMod
+namespace SamplePlugin
 {
     public class CanvasPanel
     {

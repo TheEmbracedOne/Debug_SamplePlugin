@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-namespace DebugMod
+namespace SamplePlugin
 {
     public class CanvasImage
     {

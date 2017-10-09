@@ -6,7 +6,7 @@ using System.IO;
 using UnityEngine;
 using GlobalEnums;
 
-namespace DebugMod
+namespace SamplePlugin
 {
     public static class Console
     {
@@ -140,7 +140,7 @@ namespace DebugMod
             }
             catch (Exception arg)
             {
-                Modding.ModHooks.ModLog("[DEBUG MOD] [CONSOLE] Unable to write console history: " + arg);
+               // Modding.ModHooks.ModLog("[DEBUG MOD] [CONSOLE] Unable to write console history: " + arg);
                 Console.AddLine("Unable to write console history");
             }
         }

@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace DebugMod
+namespace SamplePlugin
 {
     public class CanvasText
     {

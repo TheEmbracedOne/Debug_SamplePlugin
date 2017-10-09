@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using Modding;
+//using Modding;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using PluginManager.Plugin;
 
-namespace DebugMod
+
+namespace SamplePlugin
 {
-    public class DebugMod : Mod
+    [OnGameInit]
+    public class DebugMod  /*: Mod*/
     {
         private static GameManager _gm;
         private static InputHandler _ih;
@@ -27,25 +30,41 @@ namespace DebugMod
         public static bool infiniteSoul;
         public static bool playerInvincible;
 
-        public override void Initialize()
+        public void test (Scene sceneFrom)
         {
+            unloadTime = Time.realtimeSinceStartup;
+            if (sceneFrom.name == "Menu_Title")
+            {
+                Console.Reset();
+                DreamGate.Reset();
+                EnemiesPanel.Reset();
+                loadingChar = true;
+            }
+        }
+
+
+        public /*override*/ void Initialize()
+    {
             ModHooks.ModLog("Initializing debug mod");
             UnityEngine.SceneManagement.SceneManager.activeSceneChanged += LevelActivated;
             UnityEngine.GameObject UIObj = new UnityEngine.GameObject();
             UIObj.AddComponent<GUIController>();
             UnityEngine.GameObject.DontDestroyOnLoad(UIObj);
 
-            ModHooks.Instance.SavegameLoadHook += LoadCharacter;
-            ModHooks.Instance.NewGameHook += NewCharacter;
-            ModHooks.Instance.BeforeSceneLoadHook += OnLevelUnload;
+            UnityEngine.SceneManagement.SceneManager.sceneUnloaded += test;
+            //ModHooks.Instance.SavegameLoadHook += LoadCharacter;
+            //ModHooks.Instance.NewGameHook += NewCharacter;
+            //ModHooks.Instance.BeforeSceneLoadHook += OnLevelUnload;
 
             BossHandler.PopulateBossLists();
             GUIController.instance.BuildMenus();
 
             Console.AddLine("New session started " + DateTime.Now.ToString());
+
         }
 
-        public void NewCharacter()
+
+    public void NewCharacter()
         {
             LoadCharacter(0);
         }

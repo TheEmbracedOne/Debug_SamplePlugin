@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using InControl;
 
-namespace DebugMod
+namespace SamplePlugin
 {
     public static class InfoPanel
     {

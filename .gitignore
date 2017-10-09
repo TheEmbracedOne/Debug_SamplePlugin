@@ -6,3 +6,4 @@ Source/obj/Windows/AnyCPU/Debug/DesignTimeResolveAssemblyReferencesInput.cache
 Source/Assembly-CSharp.dll
 Source/Assembly-CSharp-firstpass.dll
 *.dll
+Build/Projects/UnityEngine.UI.definition

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace DebugMod
+namespace SamplePlugin
 {
     public struct EnemyData
     {

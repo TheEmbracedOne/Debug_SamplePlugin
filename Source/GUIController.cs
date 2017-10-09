@@ -12,10 +12,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using Modding;
+//using Modding;
+using PluginManager.Plugin;
 
-namespace DebugMod 
+
+namespace SamplePlugin 
 {
+    [OnGameInit]
     public class GUIController : MonoBehaviour
     {
         public Font trajanBold;
@@ -30,10 +33,15 @@ namespace DebugMod
         private GameObject canvas;
         private static GUIController _instance;
 
+
+        private DebugMod PatchUp = new DebugMod();
+        
         public void Awake()
         {
             hazardLocation = PlayerData.instance.hazardRespawnLocation;
             respawnSceneWatch = PlayerData.instance.respawnScene;
+
+            PatchUp.Initialize();
         }
 
         public void BuildMenus()
@@ -60,7 +68,7 @@ namespace DebugMod
 
         private void InputClicked(string input)
         {
-            Modding.ModHooks.ModLog(input);
+            //Modding.ModHooks.ModLog(input);
         }
 
         public void SetMenusActive(bool active)
@@ -474,7 +482,7 @@ namespace DebugMod
                     GUIController._instance = UnityEngine.Object.FindObjectOfType<GUIController>();
                     if (GUIController._instance == null)
                     {
-                        Modding.ModHooks.ModLog("[DEBUG MOD] Couldn't find GUIController");
+                        //Modding.ModHooks.ModLog("[DEBUG MOD] Couldn't find GUIController");
                         GUIController._instance = null;
                     }
                 }

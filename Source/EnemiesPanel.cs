@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using GlobalEnums;
 
-namespace DebugMod
+namespace SamplePlugin
 {
     public static class EnemiesPanel
     {

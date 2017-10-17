@@ -72,9 +72,9 @@ namespace SamplePlugin
         {
             if (bossFound)
             {
-                if (bossData[DebugMod.GetSceneName()].Key)
+                if (bossData[GUIController.GetSceneName()].Key)
                 {
-                    PlayMakerFSM[] components = GameObject.Find(bossData[DebugMod.GetSceneName()].Value).GetComponents<PlayMakerFSM>();
+                    PlayMakerFSM[] components = GameObject.Find(bossData[GUIController.GetSceneName()].Value).GetComponents<PlayMakerFSM>();
                     if (components != null)
                     {
                         foreach (PlayMakerFSM playMakerFSM in components)
@@ -93,7 +93,7 @@ namespace SamplePlugin
                 }
                 else
                 {
-                    PlayerData.instance.GetType().GetField(bossData[DebugMod.GetSceneName()].Value).SetValue(PlayerData.instance, false);
+                    PlayerData.instance.GetType().GetField(bossData[GUIController.GetSceneName()].Value).SetValue(PlayerData.instance, false);
                     Console.AddLine("Boss control for this scene was reset, re-enter scene or warp");
                 }
             }
@@ -107,7 +107,7 @@ namespace SamplePlugin
         {
             if (ghostFound)
             {
-                PlayerData.instance.GetType().GetField(ghostData[DebugMod.GetSceneName()]).SetValue(PlayerData.instance, 0);
+                PlayerData.instance.GetType().GetField(ghostData[GUIController.GetSceneName()]).SetValue(PlayerData.instance, 0);
                 Console.AddLine("Ghost Boss for this scene was reset, re-enter scene or warp");
             }
             else

@@ -69,7 +69,7 @@ namespace SamplePlugin
 
                 alpha -= delta * .5f;
 
-                if (alpha > 0 && DebugMod.gm.IsGameplayScene())
+                if (alpha > 0 && GUIController.gm.IsGameplayScene())
                 {
                     Color c = Color.white;
                     c.a = alpha;

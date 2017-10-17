@@ -16,7 +16,7 @@ namespace SamplePlugin
 
         public static bool PlayerDied()
         {
-            return (!playerDead && PlayerData.instance.health <= 0 && DebugMod.gm.IsGameplayScene());
+            return (!playerDead && PlayerData.instance.health <= 0 && GUIController.gm.IsGameplayScene());
         }
 
         public static void LogDeathDetails()

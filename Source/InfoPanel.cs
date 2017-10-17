@@ -158,7 +158,7 @@ namespace SamplePlugin
 
                 panel.GetText("Hero State").UpdateText(HeroController.instance.hero_state.ToString());
                 panel.GetText("Velocity").UpdateText(HeroController.instance.current_velocity.ToString());
-                panel.GetText("Nail Damage").UpdateText(DebugMod.refKnightSlash.FsmVariables.GetFsmInt("damageDealt").Value + " (Flat " + PlayerData.instance.nailDamage + ", x" + DebugMod.refKnightSlash.FsmVariables.GetFsmFloat("Multiplier").Value + ")");
+                panel.GetText("Nail Damage").UpdateText(GUIController.refKnightSlash.FsmVariables.GetFsmInt("damageDealt").Value + " (Flat " + PlayerData.instance.nailDamage + ", x" + GUIController.refKnightSlash.FsmVariables.GetFsmFloat("Multiplier").Value + ")");
                 panel.GetText("HP").UpdateText(PlayerData.instance.health + " / " + PlayerData.instance.maxHealth);
                 panel.GetText("MP").UpdateText((PlayerData.instance.MPCharge + PlayerData.instance.MPReserve).ToString());
 
@@ -172,7 +172,7 @@ namespace SamplePlugin
                 panel.GetText("Dead State").UpdateText(GetStringForBool(HeroController.instance.cState.dead));
                 panel.GetText("Hazard Death").UpdateText(HeroController.instance.cState.hazardDeath.ToString());
 
-                panel.GetText("Scene Name").UpdateText(DebugMod.GetSceneName());
+                panel.GetText("Scene Name").UpdateText(GUIController.GetSceneName());
                 panel.GetText("Transition").UpdateText(GetStringForBool(HeroController.instance.cState.transitioning));
 
                 string transState = HeroController.instance.transitionState.ToString();
@@ -180,11 +180,11 @@ namespace SamplePlugin
                 if (transState == "WAITING_TO_TRANSITION") transState = "WAITING";
 
                 panel.GetText("Trans State").UpdateText(transState);
-                panel.GetText("is Gameplay").UpdateText(GetStringForBool(DebugMod.gm.IsGameplayScene()));
+                panel.GetText("is Gameplay").UpdateText(GetStringForBool(GUIController.gm.IsGameplayScene()));
                 panel.GetText("Game State").UpdateText(GameManager.instance.gameState.ToString());
                 panel.GetText("UI State").UpdateText(UIManager.instance.uiState.ToString());
                 panel.GetText("Hero Paused").UpdateText(GetStringForBool(HeroController.instance.cState.isPaused));
-                panel.GetText("Camera Mode").UpdateText(DebugMod.refCamera.mode.ToString());
+                panel.GetText("Camera Mode").UpdateText(GUIController.refCamera.mode.ToString());
 
                 panel.GetText("Accept Input").UpdateText(GetStringForBool(HeroController.instance.acceptingInput));
                 panel.GetText("Relinquished").UpdateText(GetStringForBool(HeroController.instance.controlReqlinquished));
@@ -210,15 +210,15 @@ namespace SamplePlugin
                 panel.GetText("canSuperdash").UpdateText(GetStringForBool(HeroController.instance.CanSuperDash()));
                 panel.GetText("canQuickmap").UpdateText(GetStringForBool(HeroController.instance.CanQuickMap()));
                 panel.GetText("canInventory").UpdateText(GetStringForBool(HeroController.instance.CanOpenInventory()));
-                panel.GetText("canWarp").UpdateText(GetStringForBool(DebugMod.refDreamNail.FsmVariables.GetFsmBool("Dream Warp Allowed").Value));
-                panel.GetText("canDGate").UpdateText(GetStringForBool(DebugMod.refDreamNail.FsmVariables.GetFsmBool("Can Dream Gate").Value));
-                panel.GetText("gateAllow").UpdateText(GetStringForBool(DebugMod.refDreamNail.FsmVariables.GetFsmBool("Dream Gate Allowed").Value));
+                panel.GetText("canWarp").UpdateText(GetStringForBool(GUIController.refDreamNail.FsmVariables.GetFsmBool("Dream Warp Allowed").Value));
+                panel.GetText("canDGate").UpdateText(GetStringForBool(GUIController.refDreamNail.FsmVariables.GetFsmBool("Can Dream Gate").Value));
+                panel.GetText("gateAllow").UpdateText(GetStringForBool(GUIController.refDreamNail.FsmVariables.GetFsmBool("Dream Gate Allowed").Value));
 
                 int time1 = Mathf.FloorToInt(Time.realtimeSinceStartup / 60f);
                 int time2 = Mathf.FloorToInt(Time.realtimeSinceStartup - (float)(time1 * 60));
 
-                panel.GetText("Right1").UpdateText(string.Format("{0:00}:{1:00}", time1, time2) + "\n" + DebugMod.GetLoadTime() + "s\n" + (Vector2)DebugMod.refKnight.transform.position + "\n" + string.Format("L: {0} R: {1}", DebugMod.ih.inputActions.left.RawValue, DebugMod.ih.inputActions.right.RawValue));
-                panel.GetText("Right2").UpdateText(DebugMod.ih.inputActions.moveVector.Vector.x + ", " + DebugMod.ih.inputActions.moveVector.Vector.y + "\n" + GetStringForBool(InputManager.AnyKeyIsPressed) + "\n" + GetStringForBool(DebugMod.ih.inputActions.left.IsPressed || DebugMod.ih.inputActions.right.IsPressed) + "\n" + DebugMod.ih.inputX);
+                panel.GetText("Right1").UpdateText(string.Format("{0:00}:{1:00}", time1, time2) + "\n" + GUIController.GetLoadTime() + "s\n" + (Vector2)GUIController.refKnight.transform.position + "\n" + string.Format("L: {0} R: {1}", GUIController.ih.inputActions.left.RawValue, GUIController.ih.inputActions.right.RawValue));
+                panel.GetText("Right2").UpdateText(GUIController.ih.inputActions.moveVector.Vector.x + ", " + GUIController.ih.inputActions.moveVector.Vector.y + "\n" + GetStringForBool(InputManager.AnyKeyIsPressed) + "\n" + GetStringForBool(GUIController.ih.inputActions.left.IsPressed || GUIController.ih.inputActions.right.IsPressed) + "\n" + GUIController.ih.inputX);
             }
         }
 

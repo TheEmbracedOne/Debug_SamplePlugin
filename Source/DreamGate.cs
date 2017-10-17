@@ -178,10 +178,10 @@ namespace SamplePlugin
         {
             if (!string.IsNullOrEmpty(name) && !name.Contains("|") && DGData != null && !DGData.ContainsKey(name) && !dataBusy)
             {
-                float[] value6 = new float[] { DebugMod.refKnight.transform.position.x, DebugMod.refKnight.transform.position.y };
+                float[] value6 = new float[] { GUIController.refKnight.transform.position.x, GUIController.refKnight.transform.position.y };
                 delMenu = false;
                 dataBusy = true;
-                DGData.Add(name, new KeyValuePair<string, float[]>(DebugMod.gm.sceneName, value6));
+                DGData.Add(name, new KeyValuePair<string, float[]>(GUIController.gm.sceneName, value6));
                 dataBusy = false;
                 Console.AddLine("Added new DGdata entry named: " + name);
                 addMenu = false;

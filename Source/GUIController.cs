@@ -14,6 +14,7 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 //using Modding;
 using PluginManager.Plugin;
+//using Modding;
 
 
 namespace SamplePlugin 
@@ -21,6 +22,169 @@ namespace SamplePlugin
     [OnGameInit]
     public class GUIController : MonoBehaviour
     {
+        public static GameManager _gm;
+        private static InputHandler _ih;
+        private static GameObject _refKnight;
+        private static PlayMakerFSM _refKnightSlash;
+        private static CameraController _refCamera;
+        private static PlayMakerFSM _refDreamNail;
+
+        private static float loadTime;
+        private static float unloadTime;
+        private static bool loadingChar;
+
+        public static bool infiniteHP;
+        public static bool infiniteSoul;
+        public static bool playerInvincible;
+
+
+        public void Awake()
+        {
+
+            using (System.IO.StreamWriter writer = new System.IO.StreamWriter("E:\\DEBUG.txt", true))
+            {
+                writer.WriteLine("I'm alive");
+            }
+
+            File.WriteAllText(Application.persistentDataPath + "/debug.txt", "Alive");
+
+            //PatchUp.Initialize();
+
+            //ModHooks.ModLog("Initializing debug mod");
+            UnityEngine.SceneManagement.SceneManager.activeSceneChanged += LevelActivated;
+            //UnityEngine.GameObject UIObj = new UnityEngine.GameObject();
+            //UIObj.AddComponent<GUIController>();
+            //UnityEngine.GameObject.DontDestroyOnLoad(UIObj);
+
+            UnityEngine.SceneManagement.SceneManager.sceneUnloaded += test;
+            //ModHooks.Instance.SavegameLoadHook += LoadCharacter;
+            //ModHooks.Instance.NewGameHook += NewCharacter;
+            //ModHooks.Instance.BeforeSceneLoadHook += OnLevelUnload;
+
+            BossHandler.PopulateBossLists();
+            GUIController.instance.BuildMenus();
+
+            Console.AddLine("New session started " + DateTime.Now.ToString());
+
+            hazardLocation = PlayerData.instance.hazardRespawnLocation;
+            respawnSceneWatch = PlayerData.instance.respawnScene;
+        }
+        public void NewCharacter()
+        {
+            LoadCharacter(0);
+        }
+
+        public void LoadCharacter(int saveId)
+        {
+            Console.Reset();
+            EnemiesPanel.Reset();
+            DreamGate.Reset();
+
+            loadingChar = true;
+        }
+
+        public static string GetSceneName()
+        {
+            GameManager gm = GameManager.instance;
+
+            if (gm != null)
+            {
+                return gm.GetSceneNameString();
+            }
+
+            return "";
+        }
+
+        public static float GetLoadTime()
+        {
+            return (float)Math.Round((double)(loadTime - unloadTime), 2);
+        }
+
+        public static GameManager gm
+        {
+            get
+            {
+                if (_gm == null) _gm = GameManager.instance;
+                return _gm;
+            }
+            set
+            {
+            }
+        }
+        public static InputHandler ih
+        {
+            get
+            {
+                if (_ih == null) _ih = gm.inputHandler;
+                return _ih;
+            }
+            set
+            {
+            }
+        }
+        public static GameObject refKnight
+        {
+            get
+            {
+                if (_refKnight == null) _refKnight = HeroController.instance.gameObject;
+                return _refKnight;
+            }
+            set
+            {
+            }
+        }
+        public static PlayMakerFSM refKnightSlash
+        {
+            get
+            {
+                if (_refKnightSlash == null) _refKnightSlash = refKnight.transform.Find("Attacks/Slash").GetComponent<PlayMakerFSM>();
+                return _refKnightSlash;
+            }
+            set
+            {
+            }
+        }
+        public static CameraController refCamera
+        {
+            get
+            {
+                if (_refCamera == null) _refCamera = GameObject.Find("tk2dCamera").GetComponent<CameraController>();
+                return _refCamera;
+            }
+            set
+            {
+            }
+        }
+        public static PlayMakerFSM refDreamNail
+        {
+            get
+            {
+                if (_refDreamNail == null) _refDreamNail = FSMUtility.LocateFSM(refKnight, "Dream Nail");
+                return _refDreamNail;
+            }
+            set
+            {
+            }
+        }
+
+        public void test(Scene sceneFrom)
+        {
+            unloadTime = Time.realtimeSinceStartup;
+            if (sceneFrom.name == "Menu_Title")
+            {
+                Console.Reset();
+                DreamGate.Reset();
+                EnemiesPanel.Reset();
+                loadingChar = true;
+            }
+        }
+        public string OnLevelUnload(string toScene)
+        {
+            unloadTime = Time.realtimeSinceStartup;
+
+            return toScene;
+        }
+
         public Font trajanBold;
         public Font trajanNormal;
         public Font arial;
@@ -34,15 +198,43 @@ namespace SamplePlugin
         private static GUIController _instance;
 
 
-        private DebugMod PatchUp = new DebugMod();
+        //private DebugMod PatchUp = new DebugMod();
         
-        public void Awake()
-        {
-            hazardLocation = PlayerData.instance.hazardRespawnLocation;
-            respawnSceneWatch = PlayerData.instance.respawnScene;
 
-            PatchUp.Initialize();
+
+        public void LevelActivated(Scene sceneFrom, Scene sceneTo)
+        {
+            string sceneName = sceneTo.name;
+
+            if (loadingChar)
+            {
+                TimeSpan timeSpan = TimeSpan.FromSeconds((double)PlayerData.instance.playTime);
+                string text = string.Format("{0:00}.{1:00}", Math.Floor(timeSpan.TotalHours), timeSpan.Minutes);
+                int profileID = PlayerData.instance.profileID;
+                string saveFilename = GameManager.instance.GetSaveFilename(profileID);
+                DateTime lastWriteTime = File.GetLastWriteTime(Application.persistentDataPath + saveFilename);
+                Console.AddLine("New savegame loaded. Profile playtime " + text + " Completion: " + PlayerData.instance.completionPercentage + " Save slot: " + profileID + " Game Version: " + PlayerData.instance.version + " Last Written: " + lastWriteTime);
+
+                GUIController.instance.SetMenusActive(true);
+
+                loadingChar = false;
+            }
+
+            if (gm.IsGameplayScene())
+            {
+                loadTime = Time.realtimeSinceStartup;
+                Console.AddLine("New scene loaded: " + sceneName);
+                EnemiesPanel.Reset();
+                PlayerDeathWatcher.Reset();
+                BossHandler.LookForBoss(sceneName);
+            }
+
+            if (sceneName == "Menu_Title")
+            {
+                GUIController.instance.SetMenusActive(false);
+            }
         }
+   
 
         public void BuildMenus()
         {
@@ -183,26 +375,26 @@ namespace SamplePlugin
             Console.Update();
             HelpPanel.Update();
 
-            if (DebugMod.GetSceneName() != "Menu_Title")
+            if (GetSceneName() != "Menu_Title")
             {
-                if (DebugMod.infiniteSoul && PlayerData.instance.MPCharge < 100 && PlayerData.instance.health > 0 && !HeroController.instance.cState.dead && GameManager.instance.IsGameplayScene())
+                if (infiniteSoul && PlayerData.instance.MPCharge < 100 && PlayerData.instance.health > 0 && !HeroController.instance.cState.dead && GameManager.instance.IsGameplayScene())
                 {
                     PlayerData.instance.MPCharge = 100;
                 }
 
-                if (DebugMod.infiniteHP && !HeroController.instance.cState.dead && GameManager.instance.IsGameplayScene() && PlayerData.instance.health < PlayerData.instance.maxHealth)
+                if (infiniteHP && !HeroController.instance.cState.dead && GameManager.instance.IsGameplayScene() && PlayerData.instance.health < PlayerData.instance.maxHealth)
                 {
                     int amount = PlayerData.instance.maxHealth - PlayerData.instance.health;
                     PlayerData.instance.health = PlayerData.instance.maxHealth;
                     HeroController.instance.AddHealth(amount);
                 }
 
-                if (DebugMod.playerInvincible && PlayerData.instance != null)
+                if (playerInvincible && PlayerData.instance != null)
                 {
                     PlayerData.instance.isInvincible = true;
                 }
 
-                if (Input.GetKeyUp(KeyCode.Escape) && DebugMod.gm.IsGamePaused())
+                if (Input.GetKeyUp(KeyCode.Escape) && gm.IsGamePaused())
                 {
                     UIManager.instance.TogglePauseGame();
                 }
@@ -258,7 +450,7 @@ namespace SamplePlugin
                 }
                 if (Input.GetKeyUp(KeyCode.F5))
                 {
-                    if (PlayerData.instance.disablePause && DebugMod.GetSceneName() != "Menu_Title" && DebugMod.gm.IsGameplayScene() && !HeroController.instance.cState.recoiling)
+                    if (PlayerData.instance.disablePause && GetSceneName() != "Menu_Title" && gm.IsGameplayScene() && !HeroController.instance.cState.recoiling)
                     {
                         PlayerData.instance.disablePause = false;
                         UIManager.instance.TogglePauseGame();
@@ -276,13 +468,13 @@ namespace SamplePlugin
                 }
                 if (Input.GetKeyUp(KeyCode.F7))
                 {
-                    manualRespawn = DebugMod.refKnight.transform.position;
+                    manualRespawn = refKnight.transform.position;
                     HeroController.instance.SetHazardRespawn(manualRespawn, false);
                     Console.AddLine("Manual respawn point on this map set to" + manualRespawn.ToString());
                 }
                 if (Input.GetKeyUp(KeyCode.F8))
                 {
-                    string text = DebugMod.refCamera.mode.ToString();
+                    string text = refCamera.mode.ToString();
                     if (!cameraFollow && text != "FOLLOWING")
                     {
                         Console.AddLine("Setting Camera Mode to FOLLOW. Previous mode: " + text);
@@ -308,7 +500,7 @@ namespace SamplePlugin
                 }
                 if (Input.GetKeyUp(KeyCode.Home))
                 {
-                    GameObject gameObject = DebugMod.refKnight.transform.Find("HeroLight").gameObject;
+                    GameObject gameObject = refKnight.transform.Find("HeroLight").gameObject;
                     Color color = gameObject.GetComponent<SpriteRenderer>().color;
                     if (color.a != 0f)
                     {
@@ -325,7 +517,7 @@ namespace SamplePlugin
                 }
                 if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyUp(KeyCode.Home))
                 {
-                    DebugMod.refKnight.transform.Find("HeroLight").gameObject.SetActive(false);
+                    refKnight.transform.Find("HeroLight").gameObject.SetActive(false);
                     Console.AddLine("Object HeroLight DISABLED until reload!");
                 }
                 if (Input.GetKeyUp(KeyCode.Delete))
@@ -382,7 +574,7 @@ namespace SamplePlugin
                 }
                 if (Input.GetKeyUp(KeyCode.Backspace))
                 {
-                    tk2dSprite component = DebugMod.refKnight.GetComponent<tk2dSprite>();
+                    tk2dSprite component = refKnight.GetComponent<tk2dSprite>();
                     Color color2 = component.color;
                     if (color2.a != 0f)
                     {
@@ -437,9 +629,9 @@ namespace SamplePlugin
                         Console.AddLine("Cannot set TimeScale greater than 2.0");
                     }
                 }
-                if (cameraFollow && DebugMod.refCamera.mode != CameraController.CameraMode.FOLLOWING)
+                if (cameraFollow && refCamera.mode != CameraController.CameraMode.FOLLOWING)
                 {
-                    DebugMod.refCamera.SetMode(CameraController.CameraMode.FOLLOWING);
+                    refCamera.SetMode(CameraController.CameraMode.FOLLOWING);
                 }
 
                 if (PlayerDeathWatcher.PlayerDied())

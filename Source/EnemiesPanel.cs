@@ -362,7 +362,7 @@ namespace SamplePlugin
         {
             if (visible)
             {
-                GameObject[] rootGameObjects = UnityEngine.SceneManagement.SceneManager.GetSceneByName(DebugMod.GetSceneName()).GetRootGameObjects();
+                GameObject[] rootGameObjects = UnityEngine.SceneManagement.SceneManager.GetSceneByName(GUIController.GetSceneName()).GetRootGameObjects();
                 if (rootGameObjects != null)
                 {
                     foreach (GameObject gameObject in rootGameObjects)
@@ -466,11 +466,11 @@ namespace SamplePlugin
                 boxSize = 50f;
             }
 
-            if (visible && HeroController.instance != null && !HeroController.instance.cState.transitioning && DebugMod.gm.IsGameplayScene())
+            if (visible && HeroController.instance != null && !HeroController.instance.cState.transitioning && GUIController.gm.IsGameplayScene())
             {
                 int count = enemyPool.Count;
                 int layerMask = 133120;
-                Collider2D[] array = Physics2D.OverlapBoxAll(DebugMod.refKnight.transform.position, new Vector2(boxSize, boxSize), 1f, layerMask);
+                Collider2D[] array = Physics2D.OverlapBoxAll(GUIController.refKnight.transform.position, new Vector2(boxSize, boxSize), 1f, layerMask);
                 if (array != null)
                 {
                     for (int i = 0; i < array.Length; i++)

@@ -9,7 +9,7 @@ namespace SamplePlugin
     {
         public static void ModLog(string message)
         {
-            using (System.IO.StreamWriter writer = new System.IO.StreamWriter("@E:\\DEBUG.txt", true))
+            using (System.IO.StreamWriter writer = new System.IO.StreamWriter(@"E:\\DEBUG.txt", true))
             {
                 writer.WriteLine(message);
             }

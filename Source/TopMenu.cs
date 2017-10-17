@@ -263,8 +263,8 @@ namespace SamplePlugin
 
         private static void SetSpawnClicked(string buttonName)
         {
-            HeroController.instance.SetHazardRespawn(DebugMod.refKnight.transform.position, false);
-            Console.AddLine("Manual respawn point on this map set to" + DebugMod.refKnight.transform.position.ToString());
+            HeroController.instance.SetHazardRespawn(GUIController.refKnight.transform.position, false);
+            Console.AddLine("Manual respawn point on this map set to" + GUIController.refKnight.transform.position.ToString());
         }
 
         private static void RespawnClicked(string buttonName)
@@ -337,18 +337,18 @@ namespace SamplePlugin
 
         private static void InfiniteSoulClicked(string buttonName)
         {
-            DebugMod.infiniteSoul = !DebugMod.infiniteSoul;
-            Console.AddLine("Infinite SOUL set to " + DebugMod.infiniteSoul.ToString().ToUpper());
+            GUIController.infiniteSoul = !GUIController.infiniteSoul;
+            Console.AddLine("Infinite SOUL set to " + GUIController.infiniteSoul.ToString().ToUpper());
 
-            panel.GetButton("Infinite Soul", "Cheats Panel").SetTextColor(DebugMod.infiniteSoul ? new Color(244f / 255f, 127f / 255f, 32f / 255f) : Color.white);
+            panel.GetButton("Infinite Soul", "Cheats Panel").SetTextColor(GUIController.infiniteSoul ? new Color(244f / 255f, 127f / 255f, 32f / 255f) : Color.white);
         }
 
         private static void InfiniteHPClicked(string buttonName)
         {
-            DebugMod.infiniteHP = !DebugMod.infiniteHP;
-            Console.AddLine("Infinite HP set to " + DebugMod.infiniteHP.ToString().ToUpper());
+            GUIController.infiniteHP = !GUIController.infiniteHP;
+            Console.AddLine("Infinite HP set to " + GUIController.infiniteHP.ToString().ToUpper());
 
-            panel.GetButton("Infinite HP", "Cheats Panel").SetTextColor(DebugMod.infiniteHP ? new Color(244f / 255f, 127f / 255f, 32f / 255f) : Color.white);
+            panel.GetButton("Infinite HP", "Cheats Panel").SetTextColor(GUIController.infiniteHP ? new Color(244f / 255f, 127f / 255f, 32f / 255f) : Color.white);
         }
 
         private static void InvincibilityClicked(string buttonName)
@@ -358,7 +358,7 @@ namespace SamplePlugin
 
             panel.GetButton("Invincibility", "Cheats Panel").SetTextColor(PlayerData.instance.isInvincible ? new Color(244f / 255f, 127f / 255f, 32f / 255f) : Color.white);
 
-            DebugMod.playerInvincible = PlayerData.instance.isInvincible;
+            GUIController.playerInvincible = PlayerData.instance.isInvincible;
         }
 
         private static void AllCharmsClicked(string buttonName)
@@ -625,19 +625,19 @@ namespace SamplePlugin
             {
                 PlayerData.instance.hasDreamNail = true;
                 PlayerData.instance.hasDreamGate = true;
-                FSMUtility.LocateFSM(DebugMod.refKnight, "Dream Nail").FsmVariables.GetFsmBool("Dream Warp Allowed").Value = true;
+                FSMUtility.LocateFSM(GUIController.refKnight, "Dream Nail").FsmVariables.GetFsmBool("Dream Warp Allowed").Value = true;
                 Console.AddLine("Giving player both Dream Nail and Dream Gate");
             }
             else if (PlayerData.instance.hasDreamNail && !PlayerData.instance.hasDreamGate)
             {
                 PlayerData.instance.hasDreamGate = true;
-                FSMUtility.LocateFSM(DebugMod.refKnight, "Dream Nail").FsmVariables.GetFsmBool("Dream Warp Allowed").Value = true;
+                FSMUtility.LocateFSM(GUIController.refKnight, "Dream Nail").FsmVariables.GetFsmBool("Dream Warp Allowed").Value = true;
                 Console.AddLine("Giving player Dream Gate");
             }
             else
             {
                 PlayerData.instance.hasDreamGate = false;
-                FSMUtility.LocateFSM(DebugMod.refKnight, "Dream Nail").FsmVariables.GetFsmBool("Dream Warp Allowed").Value = false;
+                FSMUtility.LocateFSM(GUIController.refKnight, "Dream Nail").FsmVariables.GetFsmBool("Dream Warp Allowed").Value = false;
                 Console.AddLine("Taking away Dream Gate");
             }
 
@@ -923,14 +923,14 @@ namespace SamplePlugin
             DreamGate.addMenu = true;
             DreamGate.delMenu = false;
 
-            string entryName = DebugMod.gm.GetSceneNameString();
+            string entryName = GUIController.gm.GetSceneNameString();
             int i = 1;
 
             if (entryName.Length > 5) entryName = entryName.Substring(0, 5);
 
             while (DreamGate.DGData.ContainsKey(entryName))
             {
-                entryName = DebugMod.gm.GetSceneNameString() + i;
+                entryName = GUIController.gm.GetSceneNameString() + i;
                 i++;
             }
 

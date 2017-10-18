@@ -38,6 +38,14 @@ namespace SamplePlugin
         public static bool playerInvincible;
 
 
+        public static bool noclip = false;
+        public static Vector3 noclipPos;
+        public static bool levelLoading;
+
+
+            
+
+
         public void Awake()
         {
             //if (images != null && images.Count > 0) return;
@@ -46,6 +54,11 @@ namespace SamplePlugin
             {
                 writer.WriteLine("I'm alive");
             }
+
+            playerInvincible = false;
+            infiniteHP = false;
+            infiniteSoul = false;
+            noclip = false;
 
             File.WriteAllText(Application.persistentDataPath + "/debug.txt", "Alive");
 
@@ -80,6 +93,8 @@ namespace SamplePlugin
             Console.Reset();
             EnemiesPanel.Reset();
             DreamGate.Reset();
+
+            levelLoading = false;
 
             loadingChar = true;
         }
@@ -181,6 +196,7 @@ namespace SamplePlugin
         }
         public string OnLevelUnload(string toScene)
         {
+            levelLoading = true;
             unloadTime = Time.realtimeSinceStartup;
 
             return toScene;
@@ -205,6 +221,7 @@ namespace SamplePlugin
 
         public void LevelActivated(Scene sceneFrom, Scene sceneTo)
         {
+            levelLoading = false;
             string sceneName = sceneTo.name;
 
             if (loadingChar)
@@ -395,6 +412,46 @@ namespace SamplePlugin
                     PlayerData.instance.isInvincible = true;
                 }
 
+                if (noclip)
+                {
+                    if (ih.inputActions.left.IsPressed)
+                    {
+                        noclipPos = new Vector3(noclipPos.x - Time.deltaTime * 20f, noclipPos.y, noclipPos.z);
+                    }
+
+                    if (ih.inputActions.right.IsPressed)
+                    {
+                        noclipPos = new Vector3(noclipPos.x + Time.deltaTime * 20f, noclipPos.y, noclipPos.z);
+                    }
+
+                    if (ih.inputActions.up.IsPressed)
+                    {
+                        noclipPos = new Vector3(noclipPos.x, noclipPos.y + Time.deltaTime * 20f, noclipPos.z);
+                    }
+
+                    if (ih.inputActions.down.IsPressed)
+                    {
+                        noclipPos = new Vector3(noclipPos.x, noclipPos.y - Time.deltaTime * 20f, noclipPos.z);
+                    }
+
+                    if (HeroController.instance.transitionState.ToString() == "WAITING_TO_TRANSITION")
+                    {
+                        refKnight.transform.position = noclipPos;
+                    }
+                    else
+                    {
+                        noclipPos = refKnight.transform.position;
+                    }
+                }
+
+
+
+
+
+
+
+
+
                 if (Input.GetKeyUp(KeyCode.Escape) && gm.IsGamePaused())
                 {
                     UIManager.instance.TogglePauseGame();
@@ -436,6 +493,11 @@ namespace SamplePlugin
                 if (Input.GetKeyUp(KeyCode.F1))
                 {
                     SetMenusActive(!(HelpPanel.visible || InfoPanel.visible || EnemiesPanel.visible || TopMenu.visible || Console.visible));
+                }
+
+                if (EnemiesPanel.visible)
+                {
+                    EnemiesPanel.RefreshEnemyList();
                 }
                 if (Input.GetKeyUp(KeyCode.F2))
                 {
@@ -492,7 +554,7 @@ namespace SamplePlugin
                     EnemiesPanel.visible = !EnemiesPanel.visible;
                     if (EnemiesPanel.visible)
                     {
-                        EnemiesPanel.RefreshEnemyList();
+                        EnemiesPanel.enemyUpdate(200f);
                     }
                 }
                 if (Input.GetKeyUp(KeyCode.Insert))

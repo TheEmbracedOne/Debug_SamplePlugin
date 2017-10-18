@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using GlobalEnums;
+using HutongGames.PlayMaker;
 
 namespace SamplePlugin
 {
@@ -152,6 +153,13 @@ namespace SamplePlugin
             {
                 panel.GetPanel("Pause").SetActive(true, false);
                 panel.GetPanel("Play").SetActive(false, true);
+
+
+                if (!panel.active && enemyPool.Count > 0)
+                {
+                    Reset();
+                }
+
             }
 
             if (panel.active)
@@ -344,6 +352,11 @@ namespace SamplePlugin
 
         public static void Reset()
         {
+            foreach (EnemyData dat in enemyPool)
+            {
+                dat.hitbox.Destroy();
+                dat.hpBar.Destroy();
+            }
             enemyPool.Clear();
         }
 
@@ -459,7 +472,7 @@ namespace SamplePlugin
             }
         }
 
-        private static void enemyUpdate(float boxSize)
+        public static void enemyUpdate(float boxSize)
         {
             if (autoUpdate)
             {

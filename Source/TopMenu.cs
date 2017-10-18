@@ -32,7 +32,7 @@ namespace SamplePlugin
             panel.AddButton("DreamGate", GUIController.instance.images["ButtonRect"], new Vector2(546f, 68f), Vector2.zero, DreamGatePanelClicked, buttonRect, GUIController.instance.trajanBold, "DreamGate");
 
             //Dropdown panels
-            panel.AddPanel("Cheats Panel", GUIController.instance.images["DropdownBG"], new Vector2(45f, 75f), Vector2.zero, new Rect(0, 0, GUIController.instance.images["DropdownBG"].width, 150f));
+            panel.AddPanel("Cheats Panel", GUIController.instance.images["DropdownBG"], new Vector2(45f, 75f), Vector2.zero, new Rect(0, 0, GUIController.instance.images["DropdownBG"].width, 180f));
             panel.AddPanel("Charms Panel", GUIController.instance.images["DropdownBG"], new Vector2(145f, 75f), Vector2.zero, new Rect(0, 0, GUIController.instance.images["DropdownBG"].width, 180f));
             panel.AddPanel("Skills Panel", GUIController.instance.images["DropdownBG"], new Vector2(245f, 75f), Vector2.zero, new Rect(0, 0, GUIController.instance.images["DropdownBG"].width, GUIController.instance.images["DropdownBG"].height));
             panel.AddPanel("Items Panel", GUIController.instance.images["DropdownBG"], new Vector2(345f, 75f), Vector2.zero, new Rect(0, 0, GUIController.instance.images["DropdownBG"].width, GUIController.instance.images["DropdownBG"].height));
@@ -44,6 +44,8 @@ namespace SamplePlugin
             panel.GetPanel("Cheats Panel").AddButton("Infinite Soul", GUIController.instance.images["ButtonRectEmpty"], new Vector2(5f, 60f), Vector2.zero, InfiniteSoulClicked, new Rect(0f, 0f, 80f, 20f), GUIController.instance.trajanNormal, "Infinite Soul", 10);
             panel.GetPanel("Cheats Panel").AddButton("Infinite HP", GUIController.instance.images["ButtonRectEmpty"], new Vector2(5f, 90f), Vector2.zero, InfiniteHPClicked, new Rect(0f, 0f, 80f, 20f), GUIController.instance.trajanNormal, "Infinite HP", 10);
             panel.GetPanel("Cheats Panel").AddButton("Invincibility", GUIController.instance.images["ButtonRectEmpty"], new Vector2(5f, 120f), Vector2.zero, InvincibilityClicked, new Rect(0f, 0f, 80f, 20f), GUIController.instance.trajanNormal, "Invincibility", 10);
+            panel.GetPanel("Cheats Panel").AddButton("Noclip", GUIController.instance.images["ButtonRectEmpty"], new Vector2(5f, 150f), Vector2.zero, NoclipClicked, new Rect(0f, 0f, 80f, 20f), GUIController.instance.trajanNormal, "Noclip", 10);
+
 
             //Charms panel
             panel.GetPanel("Charms Panel").AddButton("All Charms", GUIController.instance.images["ButtonRectEmpty"], new Vector2(5f, 30f), Vector2.zero, AllCharmsClicked, new Rect(0f, 0f, 80f, 20f), GUIController.instance.trajanNormal, "All Charms", 10);
@@ -134,6 +136,23 @@ namespace SamplePlugin
             panel.GetPanel("DreamGate Panel").AddButton("Scroll Down", GUIController.instance.images["ScrollBarArrowDown"], new Vector2(180f, 130f), Vector2.zero, ScrollDownClicked, new Rect(0f, 0f, GUIController.instance.images["ScrollBarArrowDown"].width, GUIController.instance.images["ScrollBarArrowDown"].height));
 
             panel.FixRenderOrder();
+        }
+
+        private static void NoclipClicked(string buttonName)
+        {
+            GUIController.noclip = !GUIController.noclip;
+
+            if (GUIController.noclip)
+            {
+                Console.AddLine("Enabled noclip");
+                GUIController.noclipPos = GUIController.refKnight.transform.position;
+            }
+            else
+            {
+                Console.AddLine("Disabled noclip");
+            }
+
+            panel.GetButton("Noclip", "Cheats Panel").SetTextColor(GUIController.noclip ? new Color(244f / 255f, 127f / 255f, 32f / 255f) : Color.white);
         }
 
         public static void Update()

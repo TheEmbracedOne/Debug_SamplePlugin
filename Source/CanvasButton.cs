@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
@@ -10,13 +6,13 @@ namespace SamplePlugin
 {
     public class CanvasButton
     {
-        private GameObject buttonObj;
-        private GameObject textObj;
-        private Button button;
-        private UnityAction<string> clicked;
-        private string buttonName;
+        private readonly GameObject _buttonObj;
+        private readonly GameObject _textObj;
+        private Button _button;
+        private UnityAction<string> _clicked;
+        private readonly string _buttonName;
 
-        public bool active;
+        public bool Active;
 
         public CanvasButton(GameObject parent, string name, Texture2D tex, Vector2 pos, Vector2 size, Rect bgSubSection, Font font = null, string text = null, int fontSize = 13)
         {
@@ -25,159 +21,142 @@ namespace SamplePlugin
                 size = new Vector2(bgSubSection.width, bgSubSection.height);
             }
 
-            buttonName = name;
+            _buttonName = name;
 
-            buttonObj = new GameObject();
-            buttonObj.AddComponent<CanvasRenderer>();
-            RectTransform buttonTransform = buttonObj.AddComponent<RectTransform>();
+            _buttonObj = new GameObject();
+            _buttonObj.AddComponent<CanvasRenderer>();
+            var buttonTransform = _buttonObj.AddComponent<RectTransform>();
             buttonTransform.sizeDelta = new Vector2(bgSubSection.width, bgSubSection.height);
-            buttonObj.AddComponent<Image>().sprite = Sprite.Create(tex, new Rect(bgSubSection.x, tex.height - bgSubSection.height, bgSubSection.width, bgSubSection.height), Vector2.zero);
-            button = buttonObj.AddComponent<Button>();
+            _buttonObj.AddComponent<Image>().sprite = Sprite.Create(tex, new Rect(bgSubSection.x, tex.height - bgSubSection.height, bgSubSection.width, bgSubSection.height), Vector2.zero);
+            _button = _buttonObj.AddComponent<Button>();
 
-            buttonObj.transform.SetParent(parent.transform, false);
+            _buttonObj.transform.SetParent(parent.transform, false);
 
             buttonTransform.SetScaleX(size.x / bgSubSection.width);
             buttonTransform.SetScaleY(size.y / bgSubSection.height);
 
-            Vector2 position = new Vector2((pos.x + ((size.x / bgSubSection.width) * bgSubSection.width) / 2f) / 1920f, (1080f - (pos.y + ((size.y / bgSubSection.height) * bgSubSection.height) / 2f)) / 1080f);
+            var position = new Vector2((pos.x + ((size.x / bgSubSection.width) * bgSubSection.width) / 2f) / 1920f, (1080f - (pos.y + ((size.y / bgSubSection.height) * bgSubSection.height) / 2f)) / 1080f);
             buttonTransform.anchorMin = position;
             buttonTransform.anchorMax = position;
 
-            GameObject.DontDestroyOnLoad(buttonObj);
+            Object.DontDestroyOnLoad(_buttonObj.transform.root);
 
             if (font != null && text != null)
             {
-                textObj = new GameObject();
-                textObj.AddComponent<RectTransform>().sizeDelta = new Vector2(bgSubSection.width, bgSubSection.height);
-                Text t = textObj.AddComponent<Text>();
+                _textObj = new GameObject();
+                _textObj.AddComponent<RectTransform>().sizeDelta = new Vector2(bgSubSection.width, bgSubSection.height);
+                var t = _textObj.AddComponent<Text>();
                 t.text = text;
                 t.font = font;
                 t.fontSize = fontSize;
                 t.alignment = TextAnchor.MiddleCenter;
-                textObj.transform.SetParent(buttonObj.transform, false);
+                _textObj.transform.SetParent(_buttonObj.transform, false);
 
-                GameObject.DontDestroyOnLoad(textObj);
+                Object.DontDestroyOnLoad(_textObj.transform.root);
             }
 
-            active = true;
+            Active = true;
         }
 
         public void UpdateSprite(Texture2D tex, Rect bgSubSection)
         {
-            if (buttonObj != null)
+            if (_buttonObj != null)
             {
-                buttonObj.GetComponent<Image>().sprite = Sprite.Create(tex, new Rect(bgSubSection.x, tex.height - bgSubSection.height, bgSubSection.width, bgSubSection.height), Vector2.zero);
+                _buttonObj.GetComponent<Image>().sprite = Sprite.Create(tex, new Rect(bgSubSection.x, tex.height - bgSubSection.height, bgSubSection.width, bgSubSection.height), Vector2.zero);
             }
         }
 
         public void AddClickEvent(UnityAction<string> action)
         {
-            if (buttonObj != null)
-            {
-                clicked = action;
-                buttonObj.GetComponent<Button>().onClick.AddListener(ButtonClicked);
-            }
+            if (_buttonObj == null) return;
+            _clicked = action;
+            _buttonObj.GetComponent<Button>().onClick.AddListener(ButtonClicked);
         }
 
         private void ButtonClicked()
         {
-            if (clicked != null && buttonName != null) clicked(buttonName);
+            if (_clicked != null && _buttonName != null) _clicked(_buttonName);
         }
 
         public void UpdateText(string text)
         {
-            if (textObj != null)
+            if (_textObj != null)
             {
-                textObj.GetComponent<Text>().text = text;
+                _textObj.GetComponent<Text>().text = text;
             }
         }
 
         public void SetWidth(float width)
         {
-            if (buttonObj != null)
+            if (_buttonObj != null)
             {
-                buttonObj.GetComponent<RectTransform>().SetScaleX(width / buttonObj.GetComponent<RectTransform>().sizeDelta.x);
+                _buttonObj.GetComponent<RectTransform>().SetScaleX(width / _buttonObj.GetComponent<RectTransform>().sizeDelta.x);
             }
         }
 
         public void SetHeight(float height)
         {
-            if (buttonObj != null)
+            if (_buttonObj != null)
             {
-                buttonObj.GetComponent<RectTransform>().SetScaleY(height / buttonObj.GetComponent<RectTransform>().sizeDelta.y);
+                _buttonObj.GetComponent<RectTransform>().SetScaleY(height / _buttonObj.GetComponent<RectTransform>().sizeDelta.y);
             }
         }
 
         public void SetPosition(Vector2 pos)
         {
-            if (buttonObj != null)
-            {
-                Vector2 sz = buttonObj.GetComponent<RectTransform>().sizeDelta;
-                Vector2 position = new Vector2((pos.x + sz.x / 2f) / 1920f, (1080f - (pos.y + sz.y / 2f)) / 1080f);
-                buttonObj.GetComponent<RectTransform>().anchorMin = position;
-                buttonObj.GetComponent<RectTransform>().anchorMax = position;
-            }
+            if (_buttonObj == null) return;
+            var sz = _buttonObj.GetComponent<RectTransform>().sizeDelta;
+            var position = new Vector2((pos.x + sz.x / 2f) / 1920f, (1080f - (pos.y + sz.y / 2f)) / 1080f);
+            _buttonObj.GetComponent<RectTransform>().anchorMin = position;
+            _buttonObj.GetComponent<RectTransform>().anchorMax = position;
         }
 
         public void SetActive(bool b)
         {
-            if (buttonObj != null)
-            {
-                buttonObj.SetActive(b);
-                active = b;
-            }
+            if (_buttonObj == null) return;
+            _buttonObj.SetActive(b);
+            Active = b;
         }
 
 
         public void SetRenderIndex(int idx)
         {
-            buttonObj.transform.SetSiblingIndex(idx);
+            _buttonObj.transform.SetSiblingIndex(idx);
         }
 
         public Vector2 GetPosition()
         {
-            if (buttonObj != null)
-            {
-                Vector2 anchor = buttonObj.GetComponent<RectTransform>().anchorMin;
-                Vector2 sz = buttonObj.GetComponent<RectTransform>().sizeDelta;
+            if (_buttonObj == null) return Vector2.zero;
+            var anchor = _buttonObj.GetComponent<RectTransform>().anchorMin;
+            var sz = _buttonObj.GetComponent<RectTransform>().sizeDelta;
 
-                return new Vector2(anchor.x * 1920f - sz.x / 2f, 1080f - anchor.y * 1080f - sz.y / 2f);
-            }
-
-            return Vector2.zero;
+            return new Vector2(anchor.x * 1920f - sz.x / 2f, 1080f - anchor.y * 1080f - sz.y / 2f);
         }
 
         public void MoveToTop()
         {
-            if (buttonObj != null)
+            if (_buttonObj != null)
             {
-                buttonObj.transform.SetAsLastSibling();
+                _buttonObj.transform.SetAsLastSibling();
             }
         }
 
         public void SetTextColor(Color color)
         {
-            if (textObj != null)
-            {
-                Text t = textObj.GetComponent<Text>();
-                t.color = color;
-            }
+            if (_textObj == null) return;
+            var t = _textObj.GetComponent<Text>();
+            t.color = color;
         }
 
         public string GetText()
         {
-            if (textObj != null)
-            {
-                return textObj.GetComponent<Text>().text;
-            }
-
-            return null;
+            return _textObj != null ? _textObj.GetComponent<Text>().text : null;
         }
 
         public void Destroy()
         {
-            GameObject.Destroy(buttonObj);
-            GameObject.Destroy(textObj);
+            Object.Destroy(_buttonObj);
+            Object.Destroy(_textObj);
         }
     }
 }

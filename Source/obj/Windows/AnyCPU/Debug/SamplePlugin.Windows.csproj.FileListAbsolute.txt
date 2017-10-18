@@ -56,3 +56,19 @@ p:\_PROJECTS\Game\Hollow Knight Modding\DebugMod\SamplePlugin\Source\bin\Windows
 p:\_PROJECTS\Game\Hollow Knight Modding\DebugMod\SamplePlugin\Source\bin\Windows\AnyCPU\Debug\UnityEngine.UI.dll
 p:\_PROJECTS\Game\Hollow Knight Modding\DebugMod\SamplePlugin\Source\bin\Windows\AnyCPU\Debug\zlib.net.dll
 p:\_PROJECTS\Game\Hollow Knight Modding\DebugMod\SamplePlugin\Source\bin\Windows\AnyCPU\Debug\Mono.Security.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Debug\SamplePlugin.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Debug\SamplePlugin.pdb
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Debug\Assembly-CSharp-firstpass.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Debug\Assembly-CSharp.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Debug\ConditionalExpression.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Debug\PlayMaker.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Debug\PluginManager.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Debug\UnityEngine.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Debug\UnityEngine.Networking.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Debug\UnityEngine.UI.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Debug\zlib.net.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Debug\Mono.Security.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Debug\UnityEngine.xml
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\obj\Windows\AnyCPU\Debug\SamplePlugin.Windows.csprojResolveAssemblyReference.cache
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\obj\Windows\AnyCPU\Debug\SamplePlugin.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\obj\Windows\AnyCPU\Debug\SamplePlugin.pdb

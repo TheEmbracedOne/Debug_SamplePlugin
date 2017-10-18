@@ -1,34 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace SamplePlugin
 {
     public struct EnemyData
     {
-        public int HP;
-        public int maxHP;
-        public PlayMakerFSM FSM;
+        public int Hp;
+        public int MaxHp;
+        public PlayMakerFSM Fsm;
         public Component Spr;
-        public CanvasPanel hpBar;
-        public CanvasPanel hitbox;
-        public GameObject gameObject;
+        public CanvasPanel HpBar;
+        public CanvasPanel Hitbox;
+        public GameObject GameObject;
 
         public EnemyData(int hp, PlayMakerFSM fsm, Component spr, GameObject parent = null, GameObject go = null)
         {
-            HP = hp;
-            maxHP = hp;
-            FSM = fsm;
+            Hp = hp;
+            MaxHp = hp;
+            Fsm = fsm;
             Spr = spr;
-            gameObject = go;
+            GameObject = go;
 
-            Texture2D tex = new Texture2D(120, 40);
+            var tex = new Texture2D(120, 40);
 
-            for (int x = 0; x < 120; x++)
+            for (var x = 0; x < 120; x++)
             {
-                for (int y = 0; y < 40; y++)
+                for (var y = 0; y < 40; y++)
                 {
                     if (x < 3 || x > 116 || y < 3 || y > 36)
                     {
@@ -43,22 +39,22 @@ namespace SamplePlugin
 
             tex.Apply();
 
-            Texture2D tex2 = new Texture2D(1, 1);
-            Color yellow = Color.yellow;
+            var tex2 = new Texture2D(1, 1);
+            var yellow = Color.yellow;
             yellow.a = .7f;
             tex2.SetPixel(1, 1, yellow);
 
-            hpBar = new CanvasPanel(parent, tex, Vector2.zero, Vector2.zero, new Rect(0, 0, 120, 40));
-            hpBar.AddText("HP", "", Vector2.zero, new Vector2(120, 40), GUIController.instance.arial, 20, FontStyle.Normal, TextAnchor.MiddleCenter);
-            hpBar.FixRenderOrder();
+            HpBar = new CanvasPanel(parent, tex, Vector2.zero, Vector2.zero, new Rect(0, 0, 120, 40));
+            HpBar.AddText("HP", "", Vector2.zero, new Vector2(120, 40), GUIController.Instance.Arial, 20, FontStyle.Normal, TextAnchor.MiddleCenter);
+            HpBar.FixRenderOrder();
 
-            hitbox = new CanvasPanel(parent, tex2, Vector2.zero, Vector2.zero, new Rect(0, 0, 1, 1));
+            Hitbox = new CanvasPanel(parent, tex2, Vector2.zero, Vector2.zero, new Rect(0, 0, 1, 1));
         }
 
-        public void SetHP(int health)
+        public void SetHp(int health)
         {
-            HP = health;
-            FSM.FsmVariables.GetFsmInt("HP").Value = health;
+            Hp = health;
+            Fsm.FsmVariables.GetFsmInt("HP").Value = health;
         }
     }
 }

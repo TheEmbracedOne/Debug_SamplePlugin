@@ -1,67 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using System.Globalization;
-using UnityEngine;
 
 namespace SamplePlugin
 {
     public static class DreamGate
     {
-        public static Dictionary<string, KeyValuePair<string, float[]>> DGData = new Dictionary<string, KeyValuePair<string, float[]>>();
-        public static int scrollPosition = 0;
-        public static bool addMenu;
-        public static bool delMenu;
-        public static bool dataBusy;
+        public static Dictionary<string, KeyValuePair<string, float[]>> DgData = new Dictionary<string, KeyValuePair<string, float[]>>();
+        public static int ScrollPosition;
+        public static bool AddMenu;
+        public static bool DelMenu;
+        public static bool DataBusy;
 
         public static void Reset()
         {
-            DGData.Clear();
-            scrollPosition = 0;
+            DgData.Clear();
+            ScrollPosition = 0;
             ReadData(false);
         }
 
         public static void WriteData()
         {
-            if (DGData != null)
+            if (DgData == null) return;
+            if (File.Exists("dreamgate.dat"))
             {
-                if (File.Exists("dreamgate.dat"))
+                try
                 {
-                    try
-                    {
-                        File.Delete("dreamgate.dat");
-                    }
-                    catch (Exception arg)
-                    {
-                        //Modding.ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] Unable to delete existing dreamgate.dat " + arg);
-                        Console.AddLine("[DebugMod::DGata] Unable to delete existing dreamgate.dat " + arg);
-                        return;
-                    }
+                    File.Delete("dreamgate.dat");
                 }
-                int num = 0;
-                dataBusy = true;
-                foreach (KeyValuePair<string, KeyValuePair<string, float[]>> keyValuePair in DGData)
+                catch (Exception arg)
                 {
-                    File.AppendAllText("dreamgate.dat", string.Concat(new object[]
-                    {
-                    keyValuePair.Key,
-                    "|",
-                    keyValuePair.Value.Key,
-                    "|",
-                    keyValuePair.Value.Value[0],
-                    "-",
-                    keyValuePair.Value.Value[1],
-                    Environment.NewLine
-                    }));
-                    num++;
+                    //Modding.ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] Unable to delete existing dreamgate.dat " + arg);
+                    Console.AddLine("[DebugMod::DGata] Unable to delete existing dreamgate.dat " + arg);
+                    return;
                 }
-                dataBusy = false;
-                if (File.Exists("dreamgate.dat"))
-                {
-                    Console.AddLine("DGdata written sucessfully, entries written: " + num.ToString());
-                }
+            }
+            var num = 0;
+            DataBusy = true;
+            foreach (var keyValuePair in DgData)
+            {
+                File.AppendAllText("dreamgate.dat", string.Concat(keyValuePair.Key, "|", keyValuePair.Value.Key, "|", keyValuePair.Value.Value[0], "-", keyValuePair.Value.Value[1], Environment.NewLine));
+                num++;
+            }
+            DataBusy = false;
+            if (File.Exists("dreamgate.dat"))
+            {
+                Console.AddLine("DGdata written sucessfully, entries written: " + num);
             }
         }
 
@@ -69,106 +54,92 @@ namespace SamplePlugin
         {
             if (File.Exists("dreamgate.dat"))
             {
-                dataBusy = true;
-                if (DGData == null)
+                DataBusy = true;
+                if (DgData == null)
                 {
-                    DGData = new Dictionary<string, KeyValuePair<string, float[]>>();
+                    DgData = new Dictionary<string, KeyValuePair<string, float[]>>();
                 }
                 if (!update)
                 {
-                    DGData.Clear();
+                    DgData.Clear();
                 }
-                string[] array = File.ReadAllLines("dreamgate.dat");
-                if (array == null || array.Length == 0)
+                var array = File.ReadAllLines("dreamgate.dat");
+                if (array.Length == 0)
                 {
                     Console.AddLine("Unable to read content of dreamgate.dat properly, file is empty?");
                     //Modding.ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] Unable to read content of dreamgate.dat properly, file is empty?");
-                    dataBusy = false;
+                    DataBusy = false;
                     return;
                 }
-                for (int i = 0; i < array.Length; i++)
+                foreach (var v in array)
                 {
-                    int num = array[i].Length - array[i].Replace("|", "").Length;
-                    if (!string.IsNullOrEmpty(array[i]) && array[i].Length < 500 && array[i].Length > 17 && num == 2)
+                    var num = v.Length - v.Replace("|", "").Length;
+                    if (string.IsNullOrEmpty(v) || v.Length >= 500 || v.Length <= 17 || num != 2) continue;
+                    var array2 = v.Split('|');
+                    if (string.IsNullOrEmpty(array2[0]) || string.IsNullOrEmpty(array2[1]) ||
+                        string.IsNullOrEmpty(array2[2])) continue;
+                    var key = array2[0];
+                    var num2 = 0f;
+                    var num3 = 0f;
+                    var array3 = array2[2].Split('-');
+                    if (array3.Length == 2)
                     {
-                        string[] array2 = array[i].Split(new char[]
+                        try
                         {
-                        '|'
-                        });
-                        if (!string.IsNullOrEmpty(array2[0]) && !string.IsNullOrEmpty(array2[1]) && !string.IsNullOrEmpty(array2[2]))
+                            num2 = float.Parse(array3[0], CultureInfo.InvariantCulture);
+                            num3 = float.Parse(array3[1], CultureInfo.InvariantCulture);
+                        }
+                        catch (FormatException)
                         {
-                            string key = array2[0];
-                            float num2 = 0f;
-                            float num3 = 0f;
-                            string[] array3 = array2[2].Split(new char[]
-                            {
-                            '-'
-                            });
-                            if (array3.Length == 2)
-                            {
-                                try
-                                {
-                                    num2 = float.Parse(array3[0], CultureInfo.InvariantCulture);
-                                    num3 = float.Parse(array3[1], CultureInfo.InvariantCulture);
-                                }
-                                catch (FormatException)
-                                {
-                                    //Modding.ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] FormatException - incorrect float format");
-                                    Console.AddLine("DGdata::FormatException - incorrect float format");
-                                    dataBusy = false;
-                                    return;
-                                }
-                                catch (OverflowException)
-                                {
-                                    //Modding.ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] OverflowException - incorrect float format");
-                                    Console.AddLine("DGdata::OverflowException - incorrect float format");
-                                    dataBusy = false;
-                                    return;
-                                }
-                            }
-                            if (num2 != 0f && num3 != 0f && !DGData.ContainsKey(key))
-                            {
-                                DGData.Add(key, new KeyValuePair<string, float[]>(array2[1], new float[]
-                                {
-                                num2,
-                                num3
-                                }));
-                            }
+                            //Modding.ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] FormatException - incorrect float format");
+                            Console.AddLine("DGdata::FormatException - incorrect float format");
+                            DataBusy = false;
+                            return;
+                        }
+                        catch (OverflowException)
+                        {
+                            //Modding.ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] OverflowException - incorrect float format");
+                            Console.AddLine("DGdata::OverflowException - incorrect float format");
+                            DataBusy = false;
+                            return;
                         }
                     }
+                    if (num2 != 0f && num3 != 0f && !DgData.ContainsKey(key))
+                    {
+                        DgData.Add(key, new KeyValuePair<string, float[]>(array2[1], new float[]
+                        {
+                            num2,
+                            num3
+                        }));
+                    }
                 }
-                dataBusy = false;
-                if (DGData.Count > 0)
-                {
-                    Console.AddLine("Filled DGdata: " + DGData.Count);
-                    //Modding.ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] Filled DGdata: " + DGData.Count);
-                    return;
-                }
+                DataBusy = false;
+                if (DgData.Count <= 0) return;
+                Console.AddLine("Filled DGdata: " + DgData.Count);
+                //Modding.ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] Filled DGdata: " + DGData.Count);
+                return;
             }
-            else
-            {
-                Console.AddLine("File dreamgate.dat not found!");
-                //Modding.ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] File dreamgate.dat not found!");
-            }
+            Console.AddLine("File dreamgate.dat not found!");
+            //Modding.ModHooks.ModLog("[DEBUG MOD] [DREAM GATE] File dreamgate.dat not found!");
         }
 
         public static void ClickedEntry(string text)
         {
-            if (delMenu)
+            if (DelMenu)
             {
-                dataBusy = true;
+                DataBusy = true;
                 Console.AddLine("Removed entry " + text + " from the list");
-                DGData.Remove(text);
-                dataBusy = false;
-                delMenu = false;
+                DgData.Remove(text);
+                DataBusy = false;
+                DelMenu = false;
             }
             else
             {
-                PlayerData pd = PlayerData.instance;
+                var pd = PlayerData.instance;
 
-                pd.dreamGateScene = DGData[text].Key;
-                pd.dreamGateX = DGData[text].Value[0];
-                pd.dreamGateY = DGData[text].Value[1];
+                pd.dreamGateScene = DgData[text].Key;
+                pd.dreamGateX = DgData[text].Value[0];
+                pd.dreamGateY = DgData[text].Value[1];
                 
                 Console.AddLine("New Dreamgate warp set: " + pd.dreamGateScene + "/" + pd.dreamGateX + "/" + pd.dreamGateY);
             }
@@ -176,15 +147,15 @@ namespace SamplePlugin
 
         public static void AddEntry(string name)
         {
-            if (!string.IsNullOrEmpty(name) && !name.Contains("|") && DGData != null && !DGData.ContainsKey(name) && !dataBusy)
+            if (!string.IsNullOrEmpty(name) && !name.Contains("|") && DgData != null && !DgData.ContainsKey(name) && !DataBusy)
             {
-                float[] value6 = new float[] { GUIController.refKnight.transform.position.x, GUIController.refKnight.transform.position.y };
-                delMenu = false;
-                dataBusy = true;
-                DGData.Add(name, new KeyValuePair<string, float[]>(GUIController.gm.sceneName, value6));
-                dataBusy = false;
+                var value6 = new[] { GUIController.RefKnight.transform.position.x, GUIController.RefKnight.transform.position.y };
+                DelMenu = false;
+                DataBusy = true;
+                DgData.Add(name, new KeyValuePair<string, float[]>(GUIController.Gm.sceneName, value6));
+                DataBusy = false;
                 Console.AddLine("Added new DGdata entry named: " + name);
-                addMenu = false;
+                AddMenu = false;
             }
             else
             {

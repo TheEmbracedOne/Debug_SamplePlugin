@@ -1,1 +1,15 @@
 C:\Users\Vulpi\Desktop\SamplePlugin-master\SamplePlugin-master\Source\bin\Windows\AnyCPU\Release\SamplePlugin.xml
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Release\SamplePlugin.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Release\Assembly-CSharp-firstpass.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Release\Assembly-CSharp.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Release\ConditionalExpression.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Release\PlayMaker.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Release\PluginManager.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Release\UnityEngine.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Release\UnityEngine.Networking.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Release\UnityEngine.UI.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Release\zlib.net.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Release\Mono.Security.dll
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\bin\Windows\AnyCPU\Release\UnityEngine.xml
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\obj\Windows\AnyCPU\Release\SamplePlugin.Windows.csprojResolveAssemblyReference.cache
+C:\Users\Benjamin\Git\Debug_SamplePlugin\Source\obj\Windows\AnyCPU\Release\SamplePlugin.dll

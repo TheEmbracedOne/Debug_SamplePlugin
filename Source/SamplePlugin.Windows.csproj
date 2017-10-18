@@ -23,7 +23,6 @@
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
     <OutputPath>bin\Windows\AnyCPU\Debug</OutputPath>
     <IntermediateOutputPath>obj\Windows\AnyCPU\Debug</IntermediateOutputPath>
-    <DocumentationFile>bin\Windows\AnyCPU\Debug\SamplePlugin.xml</DocumentationFile>
     <DefineConstants>DEBUG;PLATFORM_WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -34,7 +33,6 @@
     <DebugType>none</DebugType>
     <OutputPath>bin\Windows\AnyCPU\Release</OutputPath>
     <IntermediateOutputPath>obj\Windows\AnyCPU\Release</IntermediateOutputPath>
-    <DocumentationFile>bin\Windows\AnyCPU\Release\SamplePlugin.xml</DocumentationFile>
     <DefineConstants>PLATFORM_WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -44,41 +42,41 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="UnityEngine">
-      <HintPath>..\Managed\UnityEngine.dll</HintPath>
+      <HintPath>../Managed/UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="PluginManager">
-      <HintPath>..\Managed\PluginManager.dll</HintPath>
+      <HintPath>../Managed/PluginManager.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="zlib.net">
-      <HintPath>zlib.net.dll</HintPath>
+      <HintPath>../Managed/zlib.net.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>Assembly-CSharp.dll</HintPath>
+      <HintPath>../Managed/Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="ConditionalExpression">
-      <HintPath>ConditionalExpression.dll</HintPath>
+      <HintPath>../Managed/ConditionalExpression.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Networking">
-      <HintPath>UnityEngine.Networking.dll</HintPath>
+      <HintPath>../Managed/UnityEngine.Networking.dll</HintPath>
     </Reference>
     <Reference Include="PlayMaker">
-      <HintPath>PlayMaker.dll</HintPath>
+      <HintPath>../Managed/PlayMaker.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>UnityEngine.dll</HintPath>
+      <HintPath>../Managed/UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>UnityEngine.UI.dll</HintPath>
+      <HintPath>../Managed/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml">
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>../Managed/Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="GalaxyCSharp">
-      <HintPath>GalaxyCSharp.dll</HintPath>
+      <HintPath>../Managed/GalaxyCSharp.dll</HintPath>
     </Reference>
     <Compile Include="*.cs" />
   </ItemGroup>

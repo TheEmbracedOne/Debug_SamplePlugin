@@ -1,117 +1,112 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using UnityEngine;
-using GlobalEnums;
 
 namespace SamplePlugin
 {
     public static class Console
     {
-        public static bool visible;
+        public static bool Visible;
 
-        private static CanvasPanel panel;
-        private static string GUIString = "";
-        private static float alpha = 1f;
-        private static List<string> history = new List<string>();
-        private static Vector2 scrollPosition = Vector2.zero;
-        private static float lastTime;
+        private static CanvasPanel _panel;
+        private static string _guiString = "";
+        private static float _alpha = 1f;
+        private static readonly List<string> History = new List<string>();
+        private static Vector2 _scrollPosition = Vector2.zero;
+        private static float _lastTime;
 
         public static void BuildMenu(GameObject canvas)
         {
-            panel = new CanvasPanel(canvas, GUIController.instance.images["ConsoleBg"], new Vector2(1275, 800), Vector2.zero, new Rect(0, 0, GUIController.instance.images["ConsoleBg"].width, GUIController.instance.images["ConsoleBg"].height));
+            _panel = new CanvasPanel(canvas, GUIController.Instance.GetImage("ConsoleBg"), new Vector2(1275, 800), Vector2.zero, new Rect(0, 0, GUIController.Instance.GetImage("ConsoleBg").width, GUIController.Instance.GetImage("ConsoleBg").height));
 
-            panel.AddText("Console", "", new Vector2(10f, 25f), Vector2.zero, GUIController.instance.arial);
-            panel.AddText("NoConsole", "", new Vector2(10f, 180f), Vector2.zero, GUIController.instance.arial);
+            _panel.AddText("Console", "", new Vector2(10f, 25f), Vector2.zero, GUIController.Instance.Arial);
+            _panel.AddText("NoConsole", "", new Vector2(10f, 180f), Vector2.zero, GUIController.Instance.Arial);
 
-            panel.FixRenderOrder();
+            _panel.FixRenderOrder();
 
-            GUIController.instance.arial.RequestCharactersInTexture("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890`~!@#$%^&*()-_=+[{]}\\|;:'\",<.>/? ", 13);
+            GUIController.Instance.Arial.RequestCharactersInTexture("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890`~!@#$%^&*()-_=+[{]}\\|;:'\",<.>/? ", 13);
         }
 
         public static void Update()
         {
-            if (panel == null)
+            if (_panel == null)
             {
                 return;
             }
 
-            if (visible && !panel.active)
+            if (Visible && !_panel.Active)
             {
-                panel.SetActive(true, false);
+                _panel.SetActive(true, false);
             }
-            else if (!visible && panel.active)
+            else if (!Visible && _panel.Active)
             {
-                panel.SetActive(false, true);
+                _panel.SetActive(false, true);
             }
 
-            if (panel.active)
+            if (_panel.Active)
             {
-                string consoleString = "";
-                int lineCount = 0;
+                var consoleString = "";
+                var lineCount = 0;
 
-                for (int i = history.Count - 1; i >= 0; i--)
+                for (var i = History.Count - 1; i >= 0; i--)
                 {
                     if (lineCount >= 8) break;
-                    consoleString = history[i] + "\n" + consoleString;
+                    consoleString = History[i] + "\n" + consoleString;
                     lineCount++;
                 }
 
-                panel.GetText("Console").UpdateText(consoleString);
+                _panel.GetText("Console").UpdateText(consoleString);
             }
 
-            if (!panel.active)
+            if (_panel.Active) return;
+            var delta = Time.realtimeSinceStartup - _lastTime;
+            _lastTime = Time.realtimeSinceStartup;
+
+            _alpha -= delta * .5f;
+
+            if (_alpha > 0 && GUIController.Gm.IsGameplayScene())
             {
-                float delta = Time.realtimeSinceStartup - lastTime;
-                lastTime = Time.realtimeSinceStartup;
+                var c = Color.white;
+                c.a = _alpha;
 
-                alpha -= delta * .5f;
-
-                if (alpha > 0 && GUIController.gm.IsGameplayScene())
-                {
-                    Color c = Color.white;
-                    c.a = alpha;
-
-                    panel.GetText("NoConsole").SetActive(true);
-                    panel.GetText("NoConsole").UpdateText(GUIString);
-                    panel.GetText("NoConsole").SetTextColor(c);
-                }
-                else
-                {
-                    panel.GetText("NoConsole").SetActive(false);
-                }
+                _panel.GetText("NoConsole").SetActive(true);
+                _panel.GetText("NoConsole").UpdateText(_guiString);
+                _panel.GetText("NoConsole").SetTextColor(c);
+            }
+            else
+            {
+                _panel.GetText("NoConsole").SetActive(false);
             }
         }
 
         public static void Reset()
         {
-            history.Clear();
-            alpha = 1f;
-            GUIString = "";
-            lastTime = Time.realtimeSinceStartup;
-            scrollPosition = Vector2.zero;
+            History.Clear();
+            _alpha = 1f;
+            _guiString = "";
+            _lastTime = Time.realtimeSinceStartup;
+            _scrollPosition = Vector2.zero;
         }
 
         public static void AddLine(string chatLine)
         {
-            while (history.Count > 1000)
+            while (History.Count > 1000)
             {
-                history.RemoveAt(0);
+                History.RemoveAt(0);
             }
 
-            int wrap = WrapIndex(GUIController.instance.arial, 13, chatLine);
+            var wrap = WrapIndex(GUIController.Instance.Arial, 13, chatLine);
 
             while (wrap != -1)
             {
-                int index = chatLine.LastIndexOf(' ', wrap, wrap);
+                var index = chatLine.LastIndexOf(' ', wrap, wrap);
 
                 if (index != -1)
                 {
-                    history.Add(chatLine.Substring(0, index));
+                    History.Add(chatLine.Substring(0, index));
                     chatLine = chatLine.Substring(index + 1);
-                    wrap = WrapIndex(GUIController.instance.arial, 13, chatLine);
+                    wrap = WrapIndex(GUIController.Instance.Arial, 13, chatLine);
                 }
                 else
                 {
@@ -119,15 +114,15 @@ namespace SamplePlugin
                 }
             }
 
-            history.Add(chatLine);
+            History.Add(chatLine);
 
-            scrollPosition.y = scrollPosition.y + 50f;
-            alpha = 1f;
-            lastTime = Time.realtimeSinceStartup;
+            _scrollPosition.y = _scrollPosition.y + 50f;
+            _alpha = 1f;
+            _lastTime = Time.realtimeSinceStartup;
 
-            if (!visible)
+            if (!Visible)
             {
-                GUIString = chatLine;
+                _guiString = chatLine;
             }
         }
 
@@ -135,27 +130,26 @@ namespace SamplePlugin
         {
             try
             {
-                File.WriteAllLines("console.txt", history.ToArray());
-                Console.AddLine("Written history to console.txt");
+                File.WriteAllLines("console.txt", History.ToArray());
+                AddLine("Written history to console.txt");
             }
             catch (Exception arg)
             {
                // Modding.ModHooks.ModLog("[DEBUG MOD] [CONSOLE] Unable to write console history: " + arg);
-                Console.AddLine("Unable to write console history");
+                AddLine("Unable to write console history");
             }
         }
 
         private static int WrapIndex(Font font, int fontSize, string message)
         {
-            int totalLength = 0;
+            var totalLength = 0;
 
-            CharacterInfo characterInfo;
+            var arr = message.ToCharArray();
 
-            char[] arr = message.ToCharArray();
-
-            for (int i = 0; i < arr.Length; i++)
+            for (var i = 0; i < arr.Length; i++)
             {
-                char c = arr[i];
+                var c = arr[i];
+                CharacterInfo characterInfo;
                 font.GetCharacterInfo(c, out characterInfo, fontSize);
                 totalLength += characterInfo.advance;
 

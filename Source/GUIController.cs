@@ -40,6 +40,7 @@ namespace SamplePlugin
 
         public void Awake()
         {
+            //if (images != null && images.Count > 0) return;
 
             using (System.IO.StreamWriter writer = new System.IO.StreamWriter("E:\\DEBUG.txt", true))
             {
